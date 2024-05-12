@@ -1,0 +1,20 @@
+from scapy.all import *
+
+
+def packet_callback(packet):
+    if IP in packet:
+        src_ip = packet[IP].src
+        dst_ip = packet[IP].dst
+        protocol = packet[IP].proto
+
+        if protocol == 6 and TCP in packet:
+            payload_data = str(packet[TCP].payload)
+            print(f"TCP Packet: Source IP - {src_ip}, Destination IP - {dst_ip}, Payload Data - {payload_data}")
+
+        elif protocol == 17 and UDP in packet:
+            payload_data = str(packet[UDP].payload)
+            print(f"UDP Packet: Source IP - {src_ip}, Destination IP - {dst_ip}, Payload Data - {payload_data}")
+
+
+# Start sniffing packets
+sniff(prn=packet_callback, store=0)
